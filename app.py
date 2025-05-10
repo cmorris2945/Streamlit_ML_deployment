@@ -27,30 +27,28 @@ def download_dir(local_path, s3_prefix):
                             s3.download_file(bucket_name, s3_key, local_file)
 
 
-st.title("Machine Learning Model Deployment...")
+st.title("Machine Learning Model Deployment…")
 
-button = st.button("Download Model")
-
-if button:
-      with st.spinner("Downloading 'Mac', Please wait...."):
+# Download button
+if st.button("Download Model"):
+    with st.spinner("Downloading model…"):
         download_dir(local_path, s3_prefix)
+        st.success("Downloaded!")
 
+# Text input & prediction
+text = st.text_area("Enter your review", "Type here…")
 
+# Initialize classifier just once
+device = "cuda" if torch.cuda.is_available() else "cpu"
+classifier = pipeline(
+    "text-classification",
+    model="tinybert-sentiment-analysis",
+    device=0 if device=="cuda" else -1
+)
 
-
-text = st.text_area("Enter your review 'jackass'", "Type...")
-predict  = st.button("Predict")
-
-device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-
-if predict:
-      classifier = pipeline("text-classification", model= "tinybert-sentiment-analysis", device=device)
-      output = classifier(text)
-      
-
-
-
-
-st.write(output)
-#st.info(output)
+# Only call and write when they hit Predict
+if st.button("Predict"):
+    with st.spinner("Predicting…"):
+        result = classifier(text)           # local var
+    st.write(result)            
 

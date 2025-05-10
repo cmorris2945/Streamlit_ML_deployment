@@ -26,7 +26,7 @@ input_text = st.text_area("Enter here", "this is large text area")
 
 st.markdown("RThis text is  really important")
 st.markdown("### This is a heading")
-sr.markdown(""" 1. firdt item
+st.markdown(""" 1. firdt item
             2. second item""")
 
 button = st.button("Click me")
